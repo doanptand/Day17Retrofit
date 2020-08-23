@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.ddona.day17retrofit.adapter.WorldCupPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
-
+//https://square.github.io/retrofit/
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private WorldCupPagerAdapter adapter;
     private ViewPager viewPager;

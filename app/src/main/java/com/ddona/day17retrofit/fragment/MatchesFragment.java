@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.ddona.day17retrofit.R;
 import com.ddona.day17retrofit.adapter.MatchesAdapter;
+import com.ddona.day17retrofit.api.WorldCupUtil;
 import com.ddona.day17retrofit.model.Match;
 
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MatchesFragment extends Fragment {
@@ -47,6 +51,21 @@ public class MatchesFragment extends Fragment {
         rvMatch = view.findViewById(R.id.rv_matches);
         rvMatch.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         rvMatch.setAdapter(adapter);
+        WorldCupUtil.getWorldCupService().getAllMatches().enqueue(new Callback<List<Match>>() {
+            @Override
+            public void onResponse(Call<List<Match>> call, Response<List<Match>> response) {
+                if (response.isSuccessful()) {
+                    arrMatches.clear();
+                    arrMatches.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Match>> call, Throwable t) {
+
+            }
+        });
         return view;
     }
 
@@ -54,10 +73,6 @@ public class MatchesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         arrMatches = new ArrayList<>();
-        arrMatches.add(new Match(1, "VietNam", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "Thai lan", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "23/8/2020", "19:06", "Chung ket", "T3h"));
-        arrMatches.add(new Match(1, "VietNam", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "Thai lan", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "23/8/2020", "19:06", "Chung ket", "T3h"));
-        arrMatches.add(new Match(1, "VietNam", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "Thai lan", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "23/8/2020", "19:06", "Chung ket", "T3h"));
-        arrMatches.add(new Match(1, "VietNam", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "Thai lan", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/1200px-Flag_of_Vietnam.svg.png", "23/8/2020", "19:06", "Chung ket", "T3h"));
         adapter = new MatchesAdapter(arrMatches, getActivity());
     }
 }
